@@ -1,5 +1,5 @@
 [versions]
-agp = "8.1.1"
+agp = "7.3.0"
 org-jetbrains-kotlin-android = "1.9.10"
 core-ktx = "1.12.0"
 junit = "4.13.2"
@@ -8,6 +8,12 @@ espresso-core = "3.5.1"
 lifecycle-runtime-ktx = "2.6.2"
 activity-compose = "1.7.2"
 compose-bom = "2023.09.01"
+retrofit = "2.9.0"
+koin = "3.4.0"
+lifecycle-livedata = "2.6.2"
+coil = "2.4.0"
+compose= "1.5.1"
+#koin-viewmodel = "3.0.0-alpha-4"
 
 [libraries]
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
@@ -24,6 +30,18 @@ ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview
 ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 material3 = { group = "androidx.compose.material3", name = "material3" }
+retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
+retrofit-gson = { group= "com.squareup.retrofit2", name= "converter-gson", version.ref = "retrofit" }
+retrofit-loging = { group = "com.squareup.okhttp3", name = "logging-interceptor", version = "4.11.0" }
+koin = { group= "io.insert-koin", name= "koin-android", version.ref = "koin" }
+kotlin = { group= "org.jetbrains.kotlin", name= "kotlin-stdlib-jdk8", version.ref= "org-jetbrains-kotlin-android" }
+lifecycle-livedata = { group= "androidx.lifecycle", name= "lifecycle-livedata-ktx", version.ref= "lifecycle-livedata" }
+coil = { group= "io.coil-kt", name= "coil-compose", version.ref= "coil" }
+compose-livedata = { group= "androidx.compose.runtime", name= "runtime-livedata", version.ref= "compose" }
+
+
+#koin-viewmodel = { group= "org.koin", name= "koin-androidx-viewmodel", version.ref = "koin-viewmodel" }
+
 
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "agp" }
