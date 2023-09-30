@@ -3,6 +3,7 @@ package com.thermondo.androidchallenge.model
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
 @Entity(tableName = "launches")
 data class Launch(
@@ -21,8 +22,8 @@ data class Launch(
     @SerializedName("date_precision") var datePrecision: String? = null,
 
     @PrimaryKey(autoGenerate = false)
-    @SerializedName("id") var id: String? = null,
+    @SerializedName("id") var id: String,
 
     var isBookmarked: Boolean = false
 
-)
+) : Serializable

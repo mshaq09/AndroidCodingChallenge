@@ -10,19 +10,16 @@ import kotlinx.coroutines.flow.flowOn
 
 class SpaceXRepository (private val spaceXApiService: SpaceXApiService) {
 
-    suspend fun getLaunches(tabIndex: Int): Flow<SpaceXApiState<List<Launch>>> {
+    suspend fun getLaunches(): Flow<SpaceXApiState<List<Launch>>> {
         return flow {
+            val launches = spaceXApiService.getLaunches()
+            emit(SpaceXApiState.success(launches))
+        }.flowOn(Dispatchers.IO)
+    }
 
-            // get the launches Data from the api
-
-            val launches = when(tabIndex){
-                0 -> spaceXApiService.getLaunches()
-                1 -> spaceXApiService.getUpcomingLaunches()
-                else -> listOf<Launch>()
-            }
-
-            // Emit this data wrapped in
-            // the helper class [SpaceXApiState]
+    suspend fun getUpcomingLaunches(): Flow<SpaceXApiState<List<Launch>>> {
+        return flow {
+            val launches = spaceXApiService.getUpcomingLaunches()
             emit(SpaceXApiState.success(launches))
         }.flowOn(Dispatchers.IO)
     }
@@ -35,6 +32,13 @@ class SpaceXRepository (private val spaceXApiService: SpaceXApiService) {
 
             // Emit this data wrapped in
             // the helper class [SpaceXApiState]
+            emit(SpaceXApiState.success(launches))
+        }.flowOn(Dispatchers.IO)
+    }
+
+    suspend fun getLaunch(id: String): Flow<SpaceXApiState<Launch>> {
+        return flow {
+            val launches = spaceXApiService.getLaunch(id)
             emit(SpaceXApiState.success(launches))
         }.flowOn(Dispatchers.IO)
     }

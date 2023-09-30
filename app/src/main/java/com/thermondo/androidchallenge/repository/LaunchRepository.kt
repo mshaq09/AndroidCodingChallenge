@@ -32,5 +32,11 @@ class LaunchRepository(private val launchesDao: LaunchesDao) {
         }
     }
 
+    suspend fun deleteBookMark(launch: Launch) {
+        coroutineScope.launch(Dispatchers.IO) {
+            launchesDao.deleteBookMark(launch)
+        }
+    }
+
 
 }

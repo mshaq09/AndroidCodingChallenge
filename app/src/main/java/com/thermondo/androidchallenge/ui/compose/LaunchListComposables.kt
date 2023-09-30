@@ -9,13 +9,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.thermondo.androidchallenge.model.Launch
 import com.thermondo.androidchallenge.ui.compose.bottomnavigation.BottomBar
 import com.thermondo.androidchallenge.ui.compose.bottomnavigation.NavigationGraph
 import com.thermondo.androidchallenge.viewmodel.SpaceXViewModel
 
 @Composable
 fun LaunchListComposables (
-    viewModel: SpaceXViewModel
+    viewModel: SpaceXViewModel,
+    navigateToDetails: (Launch) -> Unit,
+    bookmarkClick: (Launch) -> Unit
 ) {
     val navController: NavHostController = rememberNavController()
     val bottomBarHeight = 70.dp
@@ -31,7 +34,7 @@ fun LaunchListComposables (
         Box(
             modifier = Modifier.padding(paddingValues)
         ) {
-            NavigationGraph(navController = navController, viewModel = viewModel)
+            NavigationGraph(navController = navController, viewModel = viewModel, navigateToDetails, bookmarkClick)
         }
     }
 }

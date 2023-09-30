@@ -7,6 +7,7 @@ import com.thermondo.androidchallenge.repository.LaunchRepository
 import com.thermondo.androidchallenge.repository.SpaceXRepository
 import com.thermondo.androidchallenge.service.SpaceXApiState
 import com.thermondo.androidchallenge.service.Status
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
@@ -18,6 +19,7 @@ class SpaceXViewModel (
 
     private val launch = listOf<Launch>()
     var  upcomingState: MutableStateFlow<SpaceXApiState<List<Launch>>>
+    var launchState: MutableStateFlow<SpaceXApiState<Launch>>
 
     val launchesState = MutableStateFlow(
         SpaceXApiState(
@@ -29,9 +31,9 @@ class SpaceXViewModel (
     val nextLaunchState = MutableStateFlow(
         SpaceXApiState(
             Status.LOADING,
-            Launch(), ""
+            Launch(id=""), ""
         )
-    )
+    ).also { launchState = it }
 
     val bookmarkState = MutableStateFlow(
         SpaceXApiState(
@@ -40,19 +42,10 @@ class SpaceXViewModel (
         )
     )
 
-    init {
-        getFavoriteLaunches()
-    }
-
-     fun fetchLaunches(tabIndex: Int) {
+    fun fetchLaunches() {
         // Since Network Calls takes time,Set the
         // initial value to loading state
-         if (tabIndex == 0){
-             launchesState.value = SpaceXApiState.loading()
-         } else {
-             upcomingState?.value = SpaceXApiState.loading()
-         }
-
+         launchesState.value = SpaceXApiState.loading()
 
         // ApiCalls takes some time, So it has to be
         // run and background thread. Using viewModelScope
@@ -61,28 +54,31 @@ class SpaceXViewModel (
 
             // Collecting the data emitted
             // by the function in repository
-            spaceXRepository.getLaunches(tabIndex)
+            spaceXRepository.getLaunches()
                 // If any errors occurs like 404 not found
                 // or invalid query, set the state to error
                 // State to show some info
                 // on screen
                 .catch {
-                    if (tabIndex == 0){
-                        launchesState.value = SpaceXApiState.error(it.message.toString())
-                    } else {
-                        upcomingState?.value = SpaceXApiState.error(it.message.toString())
-                    }
-
+                    launchesState.value = SpaceXApiState.error(it.message.toString())
                 }
                 // If Api call is succeeded, set the State to Success
                 // and set the response data to data received from api
                 .collect {
-                    if (tabIndex == 0){
-                        launchesState.value = SpaceXApiState.success(it.data)
-                    } else {
-                        upcomingState?.value = SpaceXApiState.success(it.data)
-                    }
+                    launchesState.value = SpaceXApiState.success(it.data)
+                }
+        }
+    }
 
+    fun fetchUpcomingLaunches() {
+        upcomingState.value = SpaceXApiState.loading()
+        viewModelScope.launch {
+            spaceXRepository.getUpcomingLaunches()
+                .catch {
+                    upcomingState.value = SpaceXApiState.error(it.message.toString())
+                }
+                .collect {
+                    upcomingState.value = SpaceXApiState.success(it.data)
                 }
         }
     }
@@ -101,7 +97,21 @@ class SpaceXViewModel (
         }
     }
 
-    private fun getFavoriteLaunches() {
+    fun getLaunch(id: String) {
+        launchState.value = SpaceXApiState.loading()
+        viewModelScope.launch {
+            spaceXRepository.getLaunch(id)
+                .catch {
+                    launchState.value =
+                        SpaceXApiState.error(it.message.toString())
+                }
+                .collect {
+                    launchState.value = SpaceXApiState.success(it.data)
+                }
+        }
+    }
+
+    fun getFavoriteLaunches() {
         bookmarkState.value = SpaceXApiState.loading()
         viewModelScope.launch {
             launchRepository.getBookMarkedLaunches()
@@ -115,9 +125,15 @@ class SpaceXViewModel (
         }
     }
 
-    private fun addFavoriteLaunch(launch: Launch) {
+    fun addFavoriteLaunch(launch: Launch) {
         viewModelScope.launch {
             launchRepository.addBookMark(launch)
+        }
+    }
+
+    fun deleteBookMark(launch: Launch) {
+        viewModelScope.launch {
+            launchRepository.deleteBookMark(launch)
         }
     }
 }

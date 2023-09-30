@@ -12,16 +12,17 @@ import androidx.compose.ui.unit.dp
 import com.thermondo.androidchallenge.model.Launch
 import com.thermondo.androidchallenge.service.SpaceXApiState
 import com.thermondo.androidchallenge.service.Status
-import com.thermondo.androidchallenge.ui.compose.FailureComposable
-import com.thermondo.androidchallenge.ui.compose.ProgressBarComposable
-import com.thermondo.androidchallenge.ui.compose.SuccessLaunch
-import com.thermondo.androidchallenge.ui.compose.SuccessNextComposable
+import com.thermondo.androidchallenge.ui.compose.*
 import com.thermondo.androidchallenge.viewmodel.SpaceXViewModel
 
 @Composable
-fun HomeScreen(viewModel: SpaceXViewModel) {
+fun HomeScreen(
+    viewModel: SpaceXViewModel,
+    navigateToDetails: (Launch) -> Unit,
+    bookmarkClick: (Launch) -> Unit
+) {
 
-    var tabIndex by remember { mutableStateOf(0) } // 1.
+    var tabIndex by remember { mutableStateOf(0) }
     val tabTitles = listOf("All", "Upcoming", "Next Launch")
     Column(
         modifier = Modifier
@@ -35,30 +36,42 @@ fun HomeScreen(viewModel: SpaceXViewModel) {
                     text = { Text(text = title) })
             }
         }
-        renderHomeScreen(viewModel, tabIndex)
+        renderHomeScreen(viewModel, tabIndex, navigateToDetails, bookmarkClick)
     }
 }
 
 @Composable
-fun renderHomeScreen(viewModel: SpaceXViewModel, tabIndex: Int){
-    viewModel.fetchLaunches(tabIndex)
-    viewModel.getNextLaunch()
+fun renderHomeScreen(
+    viewModel: SpaceXViewModel,
+    tabIndex: Int,
+    navigateToDetails: (Launch) -> Unit,
+    bookmarkClick: (Launch) -> Unit
+) {
 
-    when(tabIndex) {
-        0 -> renderSuccessScreen(viewModel.launchesState.collectAsState().value)
-        1 -> renderSuccessScreen(viewModel.upcomingState.collectAsState().value)
+    // API call
+    LaunchedEffect(key1 = 1) {
+        viewModel.fetchLaunches()
+        viewModel.fetchUpcomingLaunches()
+        viewModel.getNextLaunch()
+    }
+
+    when (tabIndex) {
+        0 -> renderSuccessScreen(viewModel.launchesState.collectAsState().value, navigateToDetails, bookmarkClick)
+        1 -> renderSuccessScreen(viewModel.upcomingState.collectAsState().value, navigateToDetails, bookmarkClick)
         2 -> renderNextScreen(viewModel.nextLaunchState.collectAsState().value)
     }
-
-
 }
 
 @Composable
-fun renderSuccessScreen(collectAsState: SpaceXApiState<List<Launch>>) {
+fun renderSuccessScreen(
+    collectAsState: SpaceXApiState<List<Launch>>,
+    navigateToDetails: (Launch) -> Unit,
+    bookmarkClick: (Launch) -> Unit
+) {
 
-    when(collectAsState.status) {
+    when (collectAsState.status) {
         Status.LOADING -> ProgressBarComposable()
-        Status.SUCCESS -> SuccessLaunch(collectAsState.data)
+        Status.SUCCESS -> SuccessLaunch(collectAsState.data, navigateToDetails, bookmarkClick)
         Status.ERROR -> FailureComposable()
     }
 }
@@ -66,9 +79,9 @@ fun renderSuccessScreen(collectAsState: SpaceXApiState<List<Launch>>) {
 @Composable
 fun renderNextScreen(collectAsState: SpaceXApiState<Launch>) {
 
-    when(collectAsState.status) {
+    when (collectAsState.status) {
         Status.LOADING -> ProgressBarComposable()
-        Status.SUCCESS -> SuccessNextComposable(collectAsState.data)
+        Status.SUCCESS -> DetailsScreen(collectAsState)
         Status.ERROR -> FailureComposable()
     }
 }
