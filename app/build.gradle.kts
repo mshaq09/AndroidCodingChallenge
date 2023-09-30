@@ -2,6 +2,7 @@
 plugins {
     alias(libs.plugins.com.android.application)
     alias(libs.plugins.org.jetbrains.kotlin.android)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -70,6 +71,13 @@ dependencies {
     implementation(libs.kotlin)
     implementation(libs.coil)
     implementation(libs.compose.livedata)
+    implementation(libs.navigation)
+    implementation(libs.room)
+    implementation(libs.room.runtime)
+    implementation("androidx.appcompat:appcompat:1.6.1")
+    implementation("com.google.android.material:material:1.4.0")
+    annotationProcessor(libs.room.ann)
+    ksp(libs.room.compiler)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.espresso.core)

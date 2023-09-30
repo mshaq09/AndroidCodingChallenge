@@ -2,6 +2,7 @@ package com.thermondo.androidchallenge
 
 import android.app.Application
 import com.thermondo.androidchallenge.di.networkModule
+import com.thermondo.androidchallenge.di.persistenceModule
 import com.thermondo.androidchallenge.di.serviceModule
 import com.thermondo.androidchallenge.di.viewModelModule
 import org.koin.android.ext.koin.androidContext
@@ -15,7 +16,7 @@ class SpaceLaunchApplication: Application(){
         startKoin{
             androidLogger()
             androidContext(this@SpaceLaunchApplication)
-            modules(networkModule,serviceModule,viewModelModule)
+            modules(networkModule,serviceModule,viewModelModule,persistenceModule)
         }
     }
 }

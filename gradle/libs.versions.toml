@@ -13,6 +13,9 @@ koin = "3.4.0"
 lifecycle-livedata = "2.6.2"
 coil = "2.4.0"
 compose= "1.5.1"
+navigation = "2.6.0"
+room_version = "2.5.0"
+ksp = "1.9.10-1.0.13"
 #koin-viewmodel = "3.0.0-alpha-4"
 
 [libraries]
@@ -38,6 +41,12 @@ kotlin = { group= "org.jetbrains.kotlin", name= "kotlin-stdlib-jdk8", version.re
 lifecycle-livedata = { group= "androidx.lifecycle", name= "lifecycle-livedata-ktx", version.ref= "lifecycle-livedata" }
 coil = { group= "io.coil-kt", name= "coil-compose", version.ref= "coil" }
 compose-livedata = { group= "androidx.compose.runtime", name= "runtime-livedata", version.ref= "compose" }
+navigation = { group= "androidx.navigation", name= "navigation-compose", version.ref= "navigation" }
+
+room = { group= "androidx.room", name= "room-ktx", version.ref= "room_version" }
+room-runtime = { group= "androidx.room", name= "room-runtime", version.ref= "room_version" }
+room-ann = { group= "androidx.room", name= "room-compiler", version.ref= "room_version" }
+room-compiler = { group= "androidx.room", name= "room-compiler", version.ref= "room_version" }
 
 
 #koin-viewmodel = { group= "org.koin", name= "koin-androidx-viewmodel", version.ref = "koin-viewmodel" }
@@ -46,6 +55,8 @@ compose-livedata = { group= "androidx.compose.runtime", name= "runtime-livedata"
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "agp" }
 org-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "org-jetbrains-kotlin-android" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+
 
 [bundles]
 

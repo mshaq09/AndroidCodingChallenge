@@ -1,47 +1,37 @@
 package com.thermondo.androidchallenge.ui.compose
 
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.FavoriteBorder
-import androidx.compose.material3.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.snapshots.SnapshotStateList
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.thermondo.androidchallenge.model.Launch
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
+import com.thermondo.androidchallenge.ui.compose.bottomnavigation.BottomBar
+import com.thermondo.androidchallenge.ui.compose.bottomnavigation.NavigationGraph
+import com.thermondo.androidchallenge.viewmodel.SpaceXViewModel
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LaunchListComposables (
-    launches: SnapshotStateList<Launch>
+    viewModel: SpaceXViewModel
 ) {
-    val list = remember { launches }
+    val navController: NavHostController = rememberNavController()
+    val bottomBarHeight = 70.dp
 
     Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text(stringResource(com.thermondo.androidchallenge.R.string.app_name)) }
+        bottomBar = {
+            BottomBar(
+                navController = navController,
+                modifier = Modifier
+                    .height(bottomBarHeight)
             )
-        }
-    ) {
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(top = 38.dp),
-            contentPadding = PaddingValues(16.dp),
+        }) { paddingValues ->
+        Box(
+            modifier = Modifier.padding(paddingValues)
         ) {
-            items(list){ launch ->
-                LaunchListItem(
-                    launch = launch
-                )
-            }
+            NavigationGraph(navController = navController, viewModel = viewModel)
         }
     }
 }
