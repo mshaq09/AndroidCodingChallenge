@@ -22,6 +22,10 @@ import com.thermondo.androidchallenge.model.Launch
 @Composable
 fun LaunchListItem(launch: Launch, navigateToDetails: (Launch) -> Unit, bookmarkClick: (Launch) -> Unit) {
 
+    var thumbIconLiked by remember {
+        mutableStateOf(launch.isBookmarked)
+    }
+
     Card(
         modifier = Modifier
             // The space between each card and the other
@@ -53,8 +57,9 @@ fun LaunchListItem(launch: Launch, navigateToDetails: (Launch) -> Unit, bookmark
                         modifier = Modifier.weight(1f),
                         color = MaterialTheme.colorScheme.primary,
                     )
-                    Icon(imageVector =  if (launch.isBookmarked) Icons.Outlined.Favorite else Icons.Outlined.FavoriteBorder , contentDescription = "", modifier = Modifier.clickable {
+                    Icon(imageVector =  if (thumbIconLiked) Icons.Outlined.Favorite else Icons.Outlined.FavoriteBorder , contentDescription = "", modifier = Modifier.clickable {
                         launch.isBookmarked = true
+                        thumbIconLiked = !thumbIconLiked
                         bookmarkClick(launch)
                     })
                 }
