@@ -79,6 +79,7 @@ dependencies {
     annotationProcessor(libs.room.ann)
     ksp(libs.room.compiler)
     testImplementation(libs.junit)
+    testImplementation(libs.mockito)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.espresso.core)
     androidTestImplementation(platform(libs.compose.bom))

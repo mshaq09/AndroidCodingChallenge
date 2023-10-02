@@ -24,7 +24,7 @@ fun SuccessLaunch(list: List<Launch>?, navigateToDetails: (Launch) -> Unit, book
                 LaunchListItem(
                     launch = launch,
                     navigateToDetails = navigateToDetails,
-                    bookmarkClick = bookmarkClick
+                    bookmarkClick = bookmarkClick,
                 )
             }
         }
