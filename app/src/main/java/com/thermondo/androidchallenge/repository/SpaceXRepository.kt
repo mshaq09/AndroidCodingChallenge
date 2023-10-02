@@ -42,4 +42,13 @@ class SpaceXRepository (private val spaceXApiService: SpaceXApiService) {
             emit(SpaceXApiState.success(launches))
         }.flowOn(Dispatchers.IO)
     }
+
+    suspend fun getResults(page: Int, totalPages: Int): Flow<SpaceXApiState<List<Launch>>> {
+        return flow {
+            val launches = spaceXApiService.getResults(page, totalPages)
+            emit(SpaceXApiState.success(launches))
+        }.flowOn(Dispatchers.IO)
+    }
+
+
 }

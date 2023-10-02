@@ -18,4 +18,7 @@ interface SpaceXApiService {
 
     @GET("launches/{id}")
     suspend fun getLaunch(@Path("id") id: String): Launch
+
+    @GET("query")
+    suspend fun getResults(page: Int, totalPages: Int): List<Launch>
 }

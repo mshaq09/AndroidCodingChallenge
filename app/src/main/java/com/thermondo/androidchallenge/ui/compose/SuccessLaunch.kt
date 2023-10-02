@@ -29,4 +29,8 @@ fun SuccessLaunch(list: List<Launch>?, navigateToDetails: (Launch) -> Unit, book
             }
         }
     }
+
+/*    if (!(isLoading == true || isLastPage == true)) {
+            // Implement logic to trigger loading more data here
+    }*/
 }
